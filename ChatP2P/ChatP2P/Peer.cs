@@ -40,11 +40,10 @@ public class Peer
             var receiveTask = ReceiveMessage();
             await SendMessage();
             await receiveTask;
-
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Connection closed " + ex.Message);
+            Console.WriteLine("Connection closed: " + ex.Message);
         }
     }
 
@@ -54,8 +53,13 @@ public class Peer
         {
             var stream = _tcpClient!.GetStream();
             var reader = new StreamReader(stream, Encoding.UTF8);
-            var message = await reader.ReadLineAsync();
-            Console.WriteLine($"Peer message: {message}");
+
+            while (true)
+            {
+                var message = await reader.ReadLineAsync();
+                if (message == null) break; 
+                Console.WriteLine($"Peer message: {message}");
+            }
         }
         catch (Exception ex)
         {
@@ -63,18 +67,23 @@ public class Peer
         }
         finally
         {
-            //TODO;
+            Closed();
         }
-
     }
+
     public async Task SendMessage()
     {
         try
         {
             var stream = _tcpClient!.GetStream();
             var writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
-            var message = "Hola estes es mi primer mensaje";
-            await writer.WriteLineAsync(message);
+
+            while (true)
+            {
+                var message = Console.ReadLine();
+                if (message?.ToLower() == "exit") break;
+                await writer.WriteLineAsync(message);
+            }
         }
         catch (Exception ex)
         {
@@ -85,6 +94,7 @@ public class Peer
             Closed();
         }
     }
+
     private void Closed()
     {
         _tcpClient?.Close();
