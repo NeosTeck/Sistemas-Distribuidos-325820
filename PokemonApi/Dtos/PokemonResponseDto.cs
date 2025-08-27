@@ -21,6 +21,8 @@ public class PokemonResponseDto
 
     [DataMember(Name = "Stats", Order = 5)]
     public StatsDto? Stats { get; set; }
-    
+
+    [DataMember(Name = "Health", Order = 6)]
+    public int Health { get; set; }
     
 }
