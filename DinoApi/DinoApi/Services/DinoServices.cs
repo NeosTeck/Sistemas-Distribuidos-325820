@@ -20,6 +20,21 @@ namespace DinoApi.Services
             var created = await _repo.CreateAsync(model, ct);
             return created.ToResponseDto();
         }
+
+        public async Task<DinoResponseDto> GetDinoById(Guid id, CancellationToken cancellationToken)
+        {
+            var dino = await _repo.GetByIdAsync(id, cancellationToken);
+            if (dino == null)
+                throw new KeyNotFoundException("Dino not found");
+
+            return dino.ToResponseDto();
+        }
+
+        public async Task<DeleteDinoResponseDto> DeleteDino(Guid id, CancellationToken cancellationToken)
+        {
+            bool success = await _repo.DeleteAsync(id, cancellationToken);
+            return new DeleteDinoResponseDto { Success = success };
+        }
     }
 
 }

@@ -30,4 +30,25 @@ public class DinoRepo : IDinoRepo
         return DinoToCreate.ToModel();
 
     }
+    public async Task<Dino?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var dino = await _context.Dinos.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+        return dino.ToModel();
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var dino = await _context.Dinos.FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+        if (dino == null)
+            return false;
+
+        _context.Dinos.Remove(dino);
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public Task<Dino?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
