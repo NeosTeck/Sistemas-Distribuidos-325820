@@ -13,5 +13,12 @@ namespace DinoApi.Services
 
         [OperationContract]
         Task<DeleteDinoResponseDto> DeleteDino(Guid id, CancellationToken cancellationToken);
+
+        [OperationContract]
+        Task<DinoResponseDto> UpdateDino(UpdateDinoDto dino, CancellationToken cancellationToken);
+
+        [OperationContract]
+        Task<IEnumerable<DinoResponseDto>> SearchDinos(string? orden,string? postura,string? periodoPpl,string? dieta,string? continente, CancellationToken cancellationToken);
+
     }
 }

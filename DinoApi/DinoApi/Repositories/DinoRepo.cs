@@ -51,4 +51,59 @@ public class DinoRepo : IDinoRepo
     {
         throw new NotImplementedException();
     }
+
+    // Implementación del método UpdateAsync
+    public async Task<Dino?> UpdateAsync(Dino dino, CancellationToken cancellationToken)
+{
+    var existing = await _context.Dinos.FirstOrDefaultAsync(s => s.Id == dino.Id, cancellationToken);
+    if (existing == null)
+        return null;
+
+    bool duplicate = await _context.Dinos
+        .AnyAsync(d => d.Nombre == dino.Nombre && d.Id != dino.Id, cancellationToken);
+
+    if (duplicate)
+        throw new InvalidOperationException("Ya existe otro Dino con ese nombre");
+
+    existing.Nombre = dino.Nombre;
+    existing.Orden = dino.Orden;
+    existing.Postura = dino.Postura;
+    existing.PeriodoPpl = dino.PeriodoPpl;
+    existing.Dieta = dino.Dieta;
+    existing.Continente = dino.Continente;
+
+    await _context.SaveChangesAsync(cancellationToken);
+
+    return existing.ToModel();
+}
+
+public async Task<IEnumerable<Dino>> SearchAsync(
+    string? orden = null,
+    string? postura = null,
+    string? periodoPpl = null,
+    string? dieta = null,
+    string? continente = null,
+    CancellationToken cancellationToken = default)
+{
+    var query = _context.Dinos.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(orden))
+        query = query.Where(d => d.Orden!.Contains(orden));
+
+    if (!string.IsNullOrWhiteSpace(postura))
+        query = query.Where(d => d.Postura!.Contains(postura));
+
+    if (!string.IsNullOrWhiteSpace(periodoPpl))
+        query = query.Where(d => d.PeriodoPpl!.Contains(periodoPpl));
+
+    if (!string.IsNullOrWhiteSpace(dieta))
+        query = query.Where(d => d.Dieta!.Contains(dieta));
+
+    if (!string.IsNullOrWhiteSpace(continente))
+        query = query.Where(d => d.Continente!.Contains(continente));
+
+    var results = await query.AsNoTracking().ToListAsync(cancellationToken);
+    return results.Select(r => r.ToModel());
+}
+
 }

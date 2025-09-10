@@ -49,4 +49,16 @@ public static class DinoMapper
         Dieta = model.Dieta,
         Continente = model.Continente
     };
+    public static Dino ToModel(this UpdateDinoDto dto) => new Dino
+    {
+    Id = dto.Id,
+    Nombre = dto.Nombre,
+    Orden = dto.Orden,
+    Postura = dto.Postura,
+    PeriodoPpl = dto.PeriodoPpl,
+    Dieta = dto.Dieta,
+    Continente = dto.Continente
+    };
+
+    
 }
