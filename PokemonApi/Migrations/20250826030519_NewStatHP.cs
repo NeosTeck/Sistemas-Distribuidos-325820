@@ -5,15 +5,16 @@
 namespace PokemonApi.Migrations
 {
     /// <inheritdoc />
-    public partial class NuevoAtributo : Migration
+    public partial class NewStatHP : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "Health",
+                name: "HP",
                 table: "Pokemons",
                 type: "int",
+                maxLength: 50,
                 nullable: false,
                 defaultValue: 0);
         }
@@ -22,7 +23,7 @@ namespace PokemonApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Health",
+                name: "HP",
                 table: "Pokemons");
         }
     }
