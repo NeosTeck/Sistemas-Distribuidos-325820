@@ -12,7 +12,7 @@ using PokemonApi.Infrastructure;
 namespace PokemonApi.Migrations
 {
     [DbContext(typeof(RelationalDbContext))]
-    [Migration("20250827000800_InitialSetup")]
+    [Migration("20250822012636_InitialSetup")]
     partial class InitialSetup
     {
         /// <inheritdoc />
@@ -32,12 +32,15 @@ namespace PokemonApi.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<int>("Attack")
+                        .HasMaxLength(100)
                         .HasColumnType("int");
 
                     b.Property<int>("Defense")
+                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<int>("Level")
+                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -46,6 +49,7 @@ namespace PokemonApi.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<int>("Speed")
+                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("Type")

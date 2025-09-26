@@ -1,0 +1,4 @@
+@PokedexApi_HostAddress = http://localhost:8084
+
+GET {{PokedexApi_HostAddress}}/api/v1/Pokemons/126b1600-4012-4e86-a5a7-f1aaba9d3654
+Accept: application/json
