@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  yugioh-api:
+    build: .
+    container_name: yugioh-api
+    ports:
+      - "9093:9093"
+    depends_on:
+      - soap-service
+    environment:
+      - SOAP_WSDL_URL=http://yugioh-soap:9091/soap/service?wsdl
+    networks:
+      - yugioh-net
+    restart: unless-stopped
+
+  soap-service:
+    image: yu-api-oh
+    container_name: yugioh-soap
+    ports:
+      - "9091:9091"
+    networks:
+      - yugioh-net
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: yugioh-db
+    environment:
+      POSTGRES_USER: yugioh
+      POSTGRES_PASSWORD: yugioh123
+      POSTGRES_DB: yugioh_db
+    ports:
+      - "5442:5432"
+    networks:
+      - yugioh-net
+    restart: unless-stopped
+
+networks:
+  yugioh-net:
+    driver: bridge

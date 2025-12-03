@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package duelistpb;
+option csharp_namespace = "DuelistApi";
+
+import "google/protobuf/empty.proto";
+
+service DuelistService {
+    rpc CreateDuelists(stream CreateDuelistRequest) returns (CreateDuelistResponse);
+    rpc GetDuelistById(DuelistByIdRequest) returns (DuelistResponse);
+}
+
+message CreateDuelistRequest {
+    string name = 1;
+    string nickname = 2;
+    string series = 3;
+    string archetype = 4;
+    string signature_card = 5;
+    string favorite_mechanic = 6;
+}
+
+message CreateDuelistResponse {
+    int32 success_count = 1;
+    repeated DuelistResponse duelists = 2;
+}
+
+message DuelistByIdRequest {
+    string id = 1;
+}
+
+message DuelistResponse {
+    string id = 1;
+    string name = 2;
+    string nickname = 3;
+    string series = 4;
+    string archetype = 5;
+    string signature_card = 6;
+    string favorite_mechanic = 7;
+}

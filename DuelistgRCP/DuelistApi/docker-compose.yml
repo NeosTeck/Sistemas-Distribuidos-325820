@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  duelist-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MongoDB__ConnectionString=mongodb://admin:password@mongodb:27017
+      - MongoDB__DatabaseName=DuelistDB
+    depends_on:
+      - mongodb
+    networks:
+      - duelist-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: duelist-mongo
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - duelist-network
+
+networks:
+  duelist-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
